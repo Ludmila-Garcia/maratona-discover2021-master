@@ -53,18 +53,44 @@ const transactions = [
     },  
 ]
 
-
+// responsável por calcular as transações
 const Transaction = {
     //incomes: Tradução = entradas
     incomes() {
+        let income = 0;
         // somar as entradas
+        // pegar todas as transações 
+        // para cada transação
+        transactions.forEach(transaction => {
+            //se ela for maior que zero
+            if( transaction.amount > 0) {
+                 //somar a uma variável e retornar a variável
+                 //income += transaction.amount;(forma simplificada da instrução abaixo)
+                 income = income + transaction.amount;
+            }
+           
+        }) 
+        return income;
     },
     //expenses: Tradução = saídas
     expenses() {
+        let expense = 0;
         // somar as saídas
+        // pegar todas as transações
+        // para cada transação
+        transactions.forEach(transaction => {
+            // se ela for menor que zero
+            if( transaction.amount < 0) {
+                //somar a uma variável e retornar a variável
+                // expense += transaction.amount;(forma simplificada da instrução abaixo)
+                expense = expense + transaction.amount;
+            }
+        })
+        return expense;
     },
     total() {
         // entradas - saídas
+        return Transaction.incomes() + Transaction.expenses();
     }
 }
 
@@ -110,9 +136,23 @@ const DOM = {
         </td>
         `
         return html
+    },
+    
+    //vai atualizar os valores de entrada, saída e total e mostrar na tela
+    updateBalance() {
+        document
+            .getElementById('incomeDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.incomes())
+        document
+            .getElementById('expenseDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.expenses())
+        document
+            .getElementById('totalDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.total())
     }
 }
 
+// Responsável por formatar os números para Moeda Real
 const Utils = {
     formatCurrency(value) {
         const signal = Number(value) < 0 ? "-" : ""
@@ -136,3 +176,6 @@ const Utils = {
 transactions.forEach(function(transaction){
     DOM.addTransaction(transaction)
 })
+
+
+DOM.updateBalance()
